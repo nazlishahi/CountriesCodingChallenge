@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="margin_normal">16dp</dimen>
+
+    <dimen name="flexible_component">0dp</dimen>
+
+    <dimen name="text_size_default">16sp</dimen>
+    <dimen name="text_size_small">14sp</dimen>
+
+    <dimen name="text_line_spacing_extra">4sp</dimen>
+
+</resources>
