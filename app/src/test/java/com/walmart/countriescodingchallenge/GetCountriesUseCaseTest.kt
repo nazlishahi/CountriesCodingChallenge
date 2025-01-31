@@ -12,6 +12,7 @@ import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.MockitoAnnotations
 import org.mockito.junit.MockitoJUnitRunner
+import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
 
 @RunWith(MockitoJUnitRunner::class)
@@ -32,17 +33,18 @@ class GetCountriesUseCaseTest {
     fun `test should return list of countries when repository succeeds`() = runTest {
         val mockCountries = listOf(Country("United Kingdom", "EU", "UK", "London"))
         val expectedResult = mockCountries.map { LocalCountryModel.fromApiResponse(it) }
-        whenever(countriesRepository.fetchCountries()).thenReturn(mockCountries)
+        whenever(countriesRepository.fetchCountries()).thenReturn(Result.success(mockCountries))
 
         val result = getCountriesUseCase.invoke()
-        Assert.assertEquals(expectedResult, result)
+        Assert.assertEquals(expectedResult, result.getOrNull())
     }
 
     @Test
     fun `test should return null when repository fails`() = runTest {
-        whenever(countriesRepository.fetchCountries()).thenReturn(emptyList())
+        val mockThrowable = mock<Throwable>()
+        whenever(countriesRepository.fetchCountries()).thenReturn(Result.failure(mockThrowable))
 
         val result = getCountriesUseCase.invoke()
-        Assert.assertEquals(emptyList<LocalCountryModel>(), result)
+        Assert.assertEquals(mockThrowable, result.exceptionOrNull())
     }
 }

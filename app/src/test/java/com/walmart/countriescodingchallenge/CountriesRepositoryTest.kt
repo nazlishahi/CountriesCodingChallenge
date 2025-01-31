@@ -33,14 +33,18 @@ class CountriesRepositoryTest {
         whenever(apiService.getCountryList()).thenReturn(mockResponse)
 
         val result = countriesRepository.fetchCountries()
-        Assert.assertEquals(mockResponse, result)
+
+        Assert.assertTrue(result.isSuccess)
+        Assert.assertEquals(mockResponse, result.getOrDefault(listOf()))
     }
 
     @Test
     fun `fetchCountries should throw an error when the API call fails`() = runTest {
-        whenever(apiService.getCountryList()).thenReturn(null)
+        whenever(apiService.getCountryList()).thenThrow(RuntimeException("Network Error"))
 
         val result = countriesRepository.fetchCountries()
-        Assert.assertEquals(result, null)
+
+        Assert.assertTrue(result.isFailure)
+        Assert.assertEquals("Network Error", result.exceptionOrNull()?.message)
     }
 }

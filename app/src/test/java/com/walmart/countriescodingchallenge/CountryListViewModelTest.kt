@@ -24,6 +24,7 @@ import org.mockito.MockitoAnnotations
 import org.mockito.junit.MockitoJUnitRunner
 import org.mockito.kotlin.KArgumentCaptor
 import org.mockito.kotlin.argumentCaptor
+import org.mockito.kotlin.mock
 import org.mockito.kotlin.times
 import org.mockito.kotlin.whenever
 
@@ -76,7 +77,7 @@ class CountryListViewModelTest {
     @Test
     fun testGetCountries_success() = runTest {
         val mockCountryList = listOf(LocalCountryModel("United States of America", "N.A.", "Washington, D.C.", "US"))
-        whenever(getCountriesUseCase.invoke()).thenReturn(mockCountryList)
+        whenever(getCountriesUseCase.invoke()).thenReturn(Result.success(mockCountryList))
 
         viewModel.getCountries()
 
@@ -98,7 +99,8 @@ class CountryListViewModelTest {
 
     @Test
     fun testGetCountries_failure() = runTest {
-        whenever(getCountriesUseCase.invoke()).thenReturn(null)
+        val mockThrowable = mock<Throwable>()
+        whenever(getCountriesUseCase.invoke()).thenReturn(Result.failure(mockThrowable))
         viewModel.getCountries()
 
         Mockito.verify(progressFlagObserver, times(2))

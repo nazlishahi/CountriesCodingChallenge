@@ -9,9 +9,9 @@ import javax.inject.Inject
 class GetCountriesUseCase @Inject constructor (
     private val repository: CountriesRepository
 ) {
-
-    suspend operator fun invoke(): List<LocalCountryModel> = withContext(Dispatchers.IO) {
-        repository.fetchCountries()
-            .map { LocalCountryModel.fromApiResponse(it) }
+    suspend operator fun invoke(): Result<List<LocalCountryModel>> = withContext(Dispatchers.IO) {
+        return@withContext repository.fetchCountries().mapCatching { countries ->
+            countries.map { LocalCountryModel.fromApiResponse(it) }
+        }
     }
 }

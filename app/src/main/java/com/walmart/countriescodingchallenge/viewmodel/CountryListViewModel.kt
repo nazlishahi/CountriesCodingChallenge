@@ -38,8 +38,15 @@ class CountryListViewModel
         viewModelScope.launch (ioContext) {
             _progressFlag.postValue(true)
             runCatching {
-                val countryList = getCountriesUseCase.invoke()
-                _uiState.postValue(UiState.PopulateList(countryList))
+                val result = getCountriesUseCase.invoke()
+                when {
+                    result.isSuccess -> {
+                        _uiState.postValue(UiState.PopulateList(result.getOrNull().orEmpty()))
+                    }
+                    result.isFailure -> {
+                        _uiState.postValue(UiState.Error(result.exceptionOrNull()?.localizedMessage))
+                    }
+                }
             }.onFailure {
                 _uiState.postValue(UiState.Error(it.localizedMessage))
             }

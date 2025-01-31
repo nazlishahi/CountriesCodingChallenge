@@ -7,7 +7,12 @@ import javax.inject.Inject
 class CountriesRepository @Inject constructor(
     private val apiService: ApiService
 ) {
-    suspend fun fetchCountries(): List<Country> {
-        return apiService.getCountryList()
+    suspend fun fetchCountries(): Result<List<Country>> {
+        return try {
+            val response = apiService.getCountryList()
+            Result.success(response)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
     }
 }
