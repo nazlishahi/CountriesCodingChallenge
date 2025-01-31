@@ -15,7 +15,7 @@ This is a coding challenge project that fetches a list of countries from a given
 - **Language**: Kotlin
 - **Architecture**: MVVM + Clean Architecture
 - **Business Logic:** ViewModel, LiveData, UseCase, Repository
-- **UI Components**: RecyclerView, Activity, Fragment
+- **UI Components**: RecyclerView, Activity, Fragment, Jetpack Navigation component
 - **Networking**: Retrofit, OkHttpClient
 - **Dependency Injection**: Hilt
 - **Concurrency**: Coroutines
